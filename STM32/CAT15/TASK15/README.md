@@ -23,14 +23,14 @@ The hardware system is deployed on the college cricket ground to capture hyper-l
 ### 2. Core Logic / Pseudocode / Code Base
 
 **Working Principle & Operational Theory:**
-Extends Task 13/14 into a production IoT decision engine to determine whether a college cricket match can safely and viability be played on the college sports ground. Captures pitch microclimate via BME280, streams telemetry over MQTT (broker.emqx.io:1883, topic rithvic/weather/bme280), and ingests regional OpenWeatherMap macroclimate data into Node-RED. Rule-based engine evaluates: Temp < 18 C (cold, stiff pitch, not suitable), 18-26 C (moderate, optimal & perfect conditions), > 26 C (hot, playable with mandatory hydration breaks). Humidity > 65% indicates drizzle/dew risk requiring pitch inspection; <= 65% indicates dry playable conditions.
+Extends Task 13/14 into a production IoT decision engine to determine whether a college cricket match can safely and viability be played on the college sports ground. Captures pitch microclimate via BME280, streams telemetry over MQTT (broker.emqx.io:1883, topic college/weather/bme280), and ingests regional OpenWeatherMap macroclimate data into Node-RED. Rule-based engine evaluates: Temp < 18 C (cold, stiff pitch, not suitable), 18-26 C (moderate, optimal & perfect conditions), > 26 C (hot, playable with mandatory hydration breaks). Humidity > 65% indicates drizzle/dew risk requiring pitch inspection; <= 65% indicates dry playable conditions.
 
 **Pseudocode:**
 ```text
 1. Initialize STM32 HAL, System Clock (84 MHz), I2C1 (100 kHz), and UART1/2 (115200 bps).
 2. Execute BME280_Init() and configure normal mode with oversampling.
 3. Bring up ESP8266 and establish MQTT connection to broker.emqx.io:1883.
-4. Main Loop (every 5000 ms): Sample BME280, format JSON payload, publish MQTT packet to rithvic/weather/bme280.
+4. Main Loop (every 5000 ms): Sample BME280, format JSON payload, publish MQTT packet to college/weather/bme280.
 5. Node-RED Flow: Ingest MQTT payload, fetch Chennai OpenWeather API, compute Deltas (Delta_T, Delta_H, Delta_P).
 6. Execute Cricket Recommendation Rule Engine:
      if (T < 18.0) PlayerComfort = 'Cold (<18 C), dewy pitch. Not suitable.';
